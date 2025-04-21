@@ -1,0 +1,75 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gaql-validator"
+version = "0.1.0"
+description = "A Python package for validating Google Ads Query Language (GAQL) queries."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "Paul Tuck", email = "paul.tuck@oxon.org"}
+]
+keywords = ["google", "ads", "gaql", "validator", "parser"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "lark>=1.2.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-cov>=6.1.1",
+    "black>=25.1.0",
+    "isort>=6.0.1",
+    "flake8>=7.2.0",
+    "mypy>=1.15.0",
+    "basedpyright>=1.29.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/pau1tuck/gaql-validator"
+"Bug Tracker" = "https://github.com/pau1tuck/gaql-validator/issues"
+
+[project.scripts]
+gaql-validate = "gaql_validator.cli:main"
+
+[tool.black]
+target-version = ["py311"]
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[tool.pytest.ini_options]
+python_files = ["test_*.py", "*_test.py"]
+addopts = "-v --cov=gaql_validator --cov-report=term-missing"
+testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.basedpyright]
+include = ["src/**"]
+exclude = [
+    "**/__pycache__",
+    "tests/**",
+]
+ignore = []
+defineConstant = { DEBUG = true }
+reportMissingImports = "error"
+reportUnknownVariableType = true
+pythonVersion = "3.11"

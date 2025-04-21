@@ -148,8 +148,6 @@ To ensure our package meets professional standards and is easily installable via
 
 ### 8.1 Core Package Files
 - **pyproject.toml**: Modern Python packaging configuration (PEP 621 compliant)
-- **setup.py**: Optional fallback for older tooling compatibility
-- **setup.cfg**: Additional package metadata and configuration
 - **README.md**: Project documentation, installation instructions, and usage examples
 - **LICENSE**: MIT, Apache, or other appropriate license
 - **CHANGELOG.md**: Version history and notable changes
