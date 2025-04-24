@@ -207,7 +207,6 @@
   - Fixed all pylint warnings achieving a score of 10/10
   - Added proper type variable for tree node types
   - Added appropriate pylint disable flags where needed
-
 - Updated utils.py with explicit type annotations:
   - Converted all import typing references to modern Python 3.10+ syntax (List → list, etc.)
   - Added explicit type annotations for all variables, parameters, and return values
@@ -234,13 +233,44 @@
   - Confirmed proper README.md with comprehensive documentation
   - Validated all package components are correctly typed
 
+## Auto-Correction and Integration Testing
+- Added new GaqlFixer class with comprehensive query correction capabilities:
+  - Added automatic correction for invalid/misspelled resources
+  - Added automatic correction for invalid field operators
+  - Added automatic correction for missing quotes in string values
+  - Added automatic correction for invalid parameter names
+  - Added string similarity algorithm for suggesting corrections
+  - Added comprehensive error handling and reporting
+  - Added support for rebuilding queries from valid components
+- Enhanced CLI interface:
+  - Added --fix flag to enable automatic correction
+  - Added --format flag to enable query formatting
+  - Added -o/--output option to write fixed/formatted queries to a file
+  - Enhanced verbose output to show changes made during fixes
+- Added integration tests in test_integration.py:
+  - Added end-to-end validation flow test
+  - Added validation with fix flow test
+  - Added multiple error fix flow test
+  - Added complex query fix flow test
+  - Added completely invalid query fix test
+- Added unit tests for fixer in test_fixer.py:
+  - Added tests for fixing various types of issues
+  - Added tests for string similarity algorithm
+  - Added tests for handling partially fixable queries
+- Updated README with new features and examples:
+  - Added auto-correction to feature list
+  - Added CLI examples for query fixing and formatting
+  - Added code example for using the GaqlFixer class
+
 ## Project Completion
 The GAQL Validator package is now complete and ready for publication with:
 - Modern Python 3.10+ type hints with pipe syntax throughout
 - Well-documented code with complete docstrings
 - Comprehensive test suite with ~80% coverage
-- CLI interface for command-line usage
+- CLI interface for command-line usage with validation, fixing, and formatting
 - Full set of validation features for GAQL queries
+- Auto-correction capabilities for common query issues
 - Proper PyPI packaging configuration
 - Clear README with examples and documentation
 - Strong linting and type checking standards (pylint, basedpyright)
+- Integration tests to ensure end-to-end functionality

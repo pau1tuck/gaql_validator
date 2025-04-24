@@ -9,8 +9,9 @@ A Python package for validating Google Ads Query Language (GAQL) queries offline
 - **Resource Validation**: Checks that the queried resource exists
 - **Field Validation**: Validates field names and their compatibility with operators
 - **Operator Validation**: Ensures operators are valid and compatible with the fields
+- **Auto-correction**: Automatically fixes common issues in invalid queries
 - **Format Utilities**: Provides utilities for formatting and building GAQL queries
-- **CLI Interface**: Includes a command-line tool for quick validations
+- **CLI Interface**: Includes a command-line tool for quick validations and fixes
 
 ## Installation
 
@@ -83,6 +84,26 @@ query = build_gaql_query(
 print(query)
 ```
 
+### Query Auto-Correction
+
+```python
+from gaql_validator.fixer import GaqlFixer
+
+# Initialize the fixer
+fixer = GaqlFixer()
+
+# Fix an invalid query
+invalid_query = "SELECT campaign.id FROM campaing WHERE campaign.status = ENABLED"
+fixed_query, changes = fixer.fix_query(invalid_query)
+
+# Print the fixed query
+print(fixed_query)  # Corrected resource name and added quotes
+
+# Print the changes made
+for change in changes:
+    print(f"- {change}")
+```
+
 ### Query Formatting
 
 ```python
@@ -108,6 +129,18 @@ gaql-validate --strict "SELECT campaign.id FROM campaign LIMIT 10"
 
 # Enable verbose output
 gaql-validate --verbose "SELECT campaign.id FROM campaign LIMIT 10"
+
+# Format a query for better readability
+gaql-validate --format "SELECT campaign.id FROM campaign LIMIT 10"
+
+# Automatically fix an invalid query
+gaql-validate --fix "SELECT campaign.id LIMIT 10"
+
+# Fix a query and write the result to a file
+gaql-validate --fix -o fixed_query.gaql "SELECT campaign.id LIMIT 10"
+
+# Format and fix a query with verbose output
+gaql-validate --format --fix --verbose "SELECT campaign.id LIMIT 10"
 ```
 
 ## GAQL Grammar

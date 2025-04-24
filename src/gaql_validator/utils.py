@@ -40,31 +40,45 @@ def format_gaql(query: str, indent: int = 2) -> str:
         select_match = re.search(select_pattern, formatted)
 
         if select_match:
-            # Keeping regex match but not using group 2 for now
-            # Using formatted string explicitly with interpolated variables
-            formatted = re.sub(select_pattern, "\\1\\3", formatted)
+            fields = select_match.group(2).strip()
+            formatted = re.sub(select_pattern, f"SELECT {fields} FROM", formatted)
 
     # Format conditions in WHERE clause
     if "WHERE" in formatted:
-        where_pattern: str = r"(WHERE)([^O]+)(ORDER BY|LIMIT|PARAMETERS|$)"
+        where_pattern: str = r"(WHERE)([^O]+?)(ORDER BY|LIMIT|PARAMETERS|$)"
         where_match = re.search(where_pattern, formatted)
 
         if where_match:
             conditions: str = where_match.group(2).strip()
-            condition_list: list[str] = conditions.split("AND")
-            indented_conditions: str = "\n" + " " * indent + "AND ".join(condition_list)
+            condition_list: list[str] = [c.strip() for c in conditions.split("AND")]
+            indented_conditions: str = "\n" + " " * indent + (" AND ".join(condition_list))
             formatted = re.sub(where_pattern, f"\\1{indented_conditions}\\3", formatted)
 
     # Format ORDER BY clause
     if "ORDER BY" in formatted:
-        order_pattern: str = r"(ORDER BY)([^L]+)(LIMIT|PARAMETERS|$)"
+        # Fix the pattern to handle complex ORDER BY cases
+        order_pattern: str = r"(ORDER BY)([^L]+?)(LIMIT|PARAMETERS|$)"
         order_match = re.search(order_pattern, formatted)
 
         if order_match:
+            # Clean up the orderings by fixing any issues with spacing
             orderings: str = order_match.group(2).strip()
+            orderings = re.sub(r'ASCENDING', 'ASC', orderings, flags=re.IGNORECASE)
+            orderings = re.sub(r'DESCENDING', 'DESC', orderings, flags=re.IGNORECASE)
+            
+            # Split the orderings and clean up each one
             ordering_list: list[str] = [o.strip() for o in orderings.split(",")]
-            indented_orderings: str = ",\n" + " " * indent + " ".join(ordering_list)
-            formatted = re.sub(order_pattern, f"\\1{indented_orderings}\\3", formatted)
+            order_parts = []
+            for ordering in ordering_list:
+                if ordering.strip():
+                    if " ASC" not in ordering.upper() and " DESC" not in ordering.upper():
+                        ordering = ordering.strip() + " ASC"  # Default direction
+                    order_parts.append(ordering)
+                    
+            # If we have parts, join them and add to the formatted query
+            if order_parts:
+                indented_orderings: str = " " + ", ".join(order_parts)
+                formatted = re.sub(order_pattern, f"\\1{indented_orderings}\\3", formatted)
 
     return formatted
 
