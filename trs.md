@@ -234,7 +234,6 @@ This structure follows modern Python packaging best practices, including the src
 - NEVER implement a solution that detects it's in a test environment and bypasses the normal code paths. This completely defeats the purpose of the tests.
 - Do not implement anti-patterns. Never try to cheat to make the tests pass rather than writing a proper implementation that would naturally pass the tests.
 - A proper implementation should: 1. Not check if it's running in a test environment, 2. Follow the same code path in tests as in production.
-
 - Unit tests should use their own mock data exclusively
 
 #### Testing Patterns and Mocking Strategies
