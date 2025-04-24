@@ -193,3 +193,83 @@ To ensure our package meets professional standards and is easily installable via
 - **.readthedocs.yml**: Read the Docs configuration
 
 This structure follows modern Python packaging best practices, including the src-layout pattern, comprehensive testing setup, and proper documentation. It will ensure our package is maintainable, well-documented, and meets the standards expected of professional Python packages on PyPI.
+
+
+## Rules
+
+### Testing Methodology
+- We'll use step-by-step TDD approach with incremental test additions and refactoring
+- Each test will focus on a specific aspect of functionality
+
+#### Testing Process
+1. Create the initial implementation based on requirements
+2. Add one test at a time, starting with the most basic happy path
+3. Run the test and refactor the implementation until it passes
+4. Once the test passes, add the next test (typically an error case)
+5. Continue this cycle, gradually adding more complex tests
+6. Refactor the implementation as needed to pass all tests
+
+#### Test Sequence
+1. Start with basic happy path tests:
+   - Test that the agent works with valid input and mocks
+   - Verify the core functionality produces expected outputs
+   - Test the complete flow from input to output
+
+2. Add error handling tests:
+   - Test with invalid inputs (empty, malformed)
+   - Test with missing required fields
+   - Test with API errors (authentication, permission, syntax)
+   - Test with datasource errors
+
+3. Add edge case tests:
+   - Test with unusual but valid inputs
+   - Test with empty result sets
+   - Test with single row results
+   - Test with large datasets
+   - Test with missing fields in results
+   - Test with complex filter criteria
+
+ - Run one test a time, if it passes, move onto the next test. If it fails, fix the problem in the implementation and keep running the test until it passes. Continue to do that until all tests pass.
+- If the problem is in the test and not the implementation, fix the test first and then return to the implementation.
+- NEVER implement a solution that detects it's in a test environment and bypasses the normal code paths. This completely defeats the purpose of the tests.
+- Do not implement anti-patterns. Never try to cheat to make the tests pass rather than writing a proper implementation that would naturally pass the tests.
+- A proper implementation should: 1. Not check if it's running in a test environment, 2. Follow the same code path in tests as in production.
+
+- Unit tests should use their own mock data exclusively
+
+#### Testing Patterns and Mocking Strategies
+- Use pytest fixtures for common test data and mocks
+- Use `@pytest.mark.asyncio` for testing async functions (if necessary)
+- Use unittest.mock's patch decorators to mock external dependencies (if necessary)
+- Create detailed mock responses that match the expected output
+
+### Code Quality
+- Follow Django best practices for Python code
+- Include docstrings with example usage
+- Use ic for logging, not logger
+- Use consistent error handling patterns
+- Follow modern Django 3.10+ best practices for Python code
+- Use modern Django type hints for 3.10+ (not `typing` imports) consistently with pipe syntax (Type | None) and explicitly define _ALL_ types in the file
+- Leverage modern type hints (no typing library imports where possible):
+  - Use `list[str]` not `List[str]`
+  - Use `dict[str, Any]` not `Dict[str, Any]`
+  - Use `|` for union types: `str | None` not `Union[str, None]`
+  - Use the walrus operator `:=` where appropriate
+- Use structural pattern matching where it improves readability
+- You should always run pylint in the virtual environment to check for linting errors
+- You should always run basedpyright in the terminal to check for type errors after every change
+- Don't worry about minor type hint warnings in tests like Any and unknown types, as long as they don't affect the main implementation or break the test
+
+#### Comment Style
+- Use objective, technical language in comments
+- Add an explanatory comment to each section of code that achieves a separate goal
+- DO NOT use first-person pronouns and informal language, like ("we", "our", "us")
+    - Wrong: "We need to check the response here"
+    - Right: "Validate response format before processing"
+- Use the bare verb form in comments without full stops
+    - Wrong: "Validates response format before processing."
+    - Right: "Validate response format before processing"
+- Use the third-person singular in docstrings with full stops
+    - Wrong: "Validate the response format before processing"
+    - Right: "Validates the response format before processing."
+- Focus on what the code does, not the development process or changes that have been made to the code
