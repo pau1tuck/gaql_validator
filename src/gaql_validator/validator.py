@@ -1,7 +1,7 @@
 """
 Core validation functionality for GAQL queries.
 """
-from typing import Any, set
+from typing import Any
 
 from gaql_validator.exceptions import GaqlFieldError, GaqlResourceError, GaqlSyntaxError, GaqlValidationError
 from gaql_validator.parser import GaqlParser
