@@ -3,7 +3,6 @@ Lark grammar definitions for GAQL.
 """
 from lark import Lark
 
-
 # GAQL grammar reference (kept for documentation purposes)
 GAQL_GRAMMAR_REFERENCE = """
 GAQL Grammar Reference:
@@ -132,7 +131,6 @@ GAQL_GRAMMAR = r"""
     %ignore NEWLINE
     %ignore /--[^\n]*/
 """
-
 
 def create_gaql_parser() -> Lark:
     """
