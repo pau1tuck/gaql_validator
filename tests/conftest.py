@@ -9,31 +9,31 @@ from gaql_validator.validator import GaqlValidator
 
 
 @pytest.fixture
-def gaql_parser():
+def gaql_parser():  # -> Lark:  # Would add this if we could import Lark properly
     """Returns a GAQL parser instance."""
     return create_gaql_parser()
 
 
 @pytest.fixture
-def gaql_parser_instance():
+def gaql_parser_instance() -> GaqlParser:
     """Returns a GaqlParser instance."""
     return GaqlParser()
 
 
 @pytest.fixture
-def gaql_validator_instance():
+def gaql_validator_instance() -> GaqlValidator:
     """Returns a GaqlValidator instance."""
     return GaqlValidator()
 
 
 @pytest.fixture
-def valid_basic_query():
+def valid_basic_query() -> str:
     """Returns a valid basic GAQL query."""
     return "SELECT campaign.id FROM campaign LIMIT 10"
 
 
 @pytest.fixture
-def valid_complex_query():
+def valid_complex_query() -> str:
     """Returns a valid complex GAQL query with all clause types."""
     return """
     SELECT
@@ -51,7 +51,7 @@ def valid_complex_query():
 
 
 @pytest.fixture
-def invalid_queries():
+def invalid_queries() -> dict[str, dict[str, str]]:
     """Returns a dictionary of invalid GAQL queries with their error types."""
     return {
         "missing_from": {
